@@ -32,7 +32,7 @@ ApexBlog 是一个基于 Spring Boot 3.x 开发的轻量化个人博客系统，
                     │   数据存储       │
                     │                 │
                     │  - MySQL 数据库  │
-                    │  - Redis 缓存    │
+                    │  - 内存缓存      │
                     │  - 文件存储      │
                     └─────────────────┘
 ```
@@ -43,7 +43,7 @@ ApexBlog 是一个基于 Spring Boot 3.x 开发的轻量化个人博客系统，
 - **Java版本**: Java 17
 - **构建工具**: Gradle 8.5
 - **数据库**: MySQL 8.0
-- **缓存**: Redis 7.x
+- **缓存**: Spring Cache (内存缓存)
 - **安全认证**: Spring Security + JWT
 - **API文档**: SpringDoc OpenAPI 3
 - **容器化**: Docker + Docker Compose
@@ -70,7 +70,7 @@ ApexBlog 是一个基于 Spring Boot 3.x 开发的轻量化个人博客系统，
 - ✅ 用户认证（仅限博主登录）
 
 ### 技术特性
-- ✅ Redis缓存优化
+- ✅ 内存缓存优化
 - ✅ 异步任务处理
 - ✅ 访问统计（IP去重）
 - ✅ 邮件通知
@@ -85,7 +85,6 @@ ApexBlog 是一个基于 Spring Boot 3.x 开发的轻量化个人博客系统，
 
 - Java 17+
 - MySQL 8.0+
-- Redis 7.x+
 - Docker & Docker Compose（可选）
 
 ### 本地开发
@@ -184,12 +183,11 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/apex_blog
-    username: ${DB_USERNAME:root}
+    username: root
     password: ${DB_PASSWORD:password}
-  
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+
+  cache:
+    type: simple  # 使用简单内存缓存
 
 jwt:
   secret: ${JWT_SECRET:your-secret-key}
@@ -206,12 +204,7 @@ blog:
 
 ```bash
 # 数据库配置
-DB_USERNAME=apex_user
 DB_PASSWORD=your_password
-
-# Redis配置
-REDIS_HOST=localhost
-REDIS_PORT=6379
 
 # JWT配置
 JWT_SECRET=your-jwt-secret
@@ -248,7 +241,7 @@ BLOG_URL=https://yourdomain.com
 ## 部署建议
 
 ### 生产环境
-1. 使用外部MySQL和Redis服务
+1. 使用外部MySQL服务
 2. 配置SSL证书
 3. 使用Nginx反向代理
 4. 配置日志收集
