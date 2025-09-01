@@ -21,7 +21,7 @@ ApexBlog 是一个基于 Spring Boot 3.x 开发的轻量化个人博客系统，
 
 </div>
 
-### 后台管理
+
 <div align="center">
 
 **后台首页**
